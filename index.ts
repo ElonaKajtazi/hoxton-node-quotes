@@ -34,6 +34,12 @@ const quotes = [
     author: "Henry Ford",
     quote: '"Whether you think you can or you think you can’t, you’re right."',
   },
+  {
+    id: 7,
+    author: "Forrest Gump",
+    quote:
+      '"Life is like a box of chocolates. You never know what you’re going to get."',
+  },
 ];
 // let numbers =[0, 1, 2, 3]
 // let shuffledNumbers = numbers.sort(() => Math.random() - 0.5)
