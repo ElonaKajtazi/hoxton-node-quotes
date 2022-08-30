@@ -20,13 +20,19 @@ const quotes = [
     quote: '"Life is what happens when you’re busy making other plans."',
   },
   {
-    id: 1,
+    id: 4,
     author: "Joe Kennedy",
     quote: '"When the going gets tough, the tough get going."',
   },
+  {
+    id: 5,
+    author: 'Mahatma Gandhi',
+    quote: '"You must be the change you wish to see in the world."',
+  },
 ];
-// const randomQuote = Math.floor(Math.random() * quotes.length);
-
+// let numbers =[0, 1, 2, 3]
+// let shuffledNumbers = numbers.sort(() => Math.random() - 0.5)
+let number = Math.floor(Math.random() * 4);
 app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -36,9 +42,9 @@ app.get("/quotes", (req, res) => {
   res.send(quotes);
 });
 app.get("/quote", (req, res) => {
-  res.send(quotes[1]);
+  res.send(quotes[Math.floor(Math.random() * quotes.length)]);
 });
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
-  //   console.log(getRandomItem(quotes));
+  // console.log(shuffledNumbers);
 });
