@@ -26,8 +26,13 @@ const quotes = [
   },
   {
     id: 5,
-    author: 'Mahatma Gandhi',
+    author: "Mahatma Gandhi",
     quote: '"You must be the change you wish to see in the world."',
+  },
+  {
+    id: 6,
+    author: "Henry Ford",
+    quote: '"Whether you think you can or you think you can’t, you’re right."',
   },
 ];
 // let numbers =[0, 1, 2, 3]
@@ -41,7 +46,7 @@ app.get("/", (req, res) => {
 app.get("/quotes", (req, res) => {
   res.send(quotes);
 });
-app.get("/quote", (req, res) => {
+app.get("/random", (req, res) => {
   res.send(quotes[Math.floor(Math.random() * quotes.length)]);
 });
 app.listen(port, () => {
