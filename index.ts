@@ -6,18 +6,37 @@ const port = 5000;
 const quotes = [
   {
     id: 1,
-    author: "Lao Tzu",
-    quote: '"The journey of a thousand miles begins with one step."',
+    author: {
+      firstName: "Tony",
+      lastName: "Robins",
+      age: 62,
+      image:
+        "https://netstorage-briefly.akamaized.net/images/3e85f08c087827f3.jpg?imwidth=900",
+    },
+    quote: '"Goal setting is the secret to a compelling future."',
   },
   {
     id: 2,
-    author: "Friedrich Nietzsche",
-    quote: '"That which does not kill us makes us stronger."',
+    author: {
+      firstName: "Vern",
+      lastName: "Law",
+      age: 92,
+      image:
+        "https://upload.wikimedia.org/wikipedia/commons/5/58/Vern_Law_%285405222334%29_%28cropped%29.jpg",
+    },
+    quote:
+      '"Experience is a hard teacher because she gives the test first, the lesson afterwards."',
   },
   {
     id: 3,
-    author: "John Lennon",
-    quote: '"Life is what happens when you’re busy making other plans."',
+    author: {
+      firstName: "Cindy",
+      lastName: "Gallop",
+      age: 62,
+      image:
+        "https://dublintechsummit.tech/wp-content/uploads/sites/7/2017/01/cindy-landscape-720x423.jpg",
+    },
+    quote: '"Women challenge the status quo because we are never it."',
   },
   {
     id: 4,
@@ -42,7 +61,6 @@ const quotes = [
   },
 ];
 
-
 app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -56,5 +74,4 @@ app.get("/random", (req, res) => {
 });
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
-
 });
