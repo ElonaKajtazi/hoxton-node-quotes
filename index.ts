@@ -90,9 +90,9 @@ app.get("/", (req, res) => {
 app.get("/quotes", (req, res) => {
   let quotesToSend = quotes;
   // console.log(Number(req.query.quantity))
-  if (req.query.quantity) {
+  if (req.query.age) {
     quotesToSend = quotesToSend.filter(
-      (quote) => quote.quantity === Number(req.query.quantity)
+      (quote) => quote.age === Number(req.query.age)
     );
   }
   if (req.query.quote) {
