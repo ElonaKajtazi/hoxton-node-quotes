@@ -40,24 +40,51 @@ const quotes = [
   },
   {
     id: 4,
-    author: "Joe Kennedy",
-    quote: '"When the going gets tough, the tough get going."',
+    author: {
+      firstName: "Arlan",
+      lastName: "Hamillton",
+      age: 41,
+      image:
+        "https://s24806.pcdn.co/wp-content/uploads/2021/05/ArlanHamilton-2019photo-970.jpg",
+    },
+    quote:
+      '"We don’t just sit around and wait for other people. We just make, and we do."',
   },
   {
     id: 5,
-    author: "Mahatma Gandhi",
-    quote: '"You must be the change you wish to see in the world."',
+    author: {
+      firstName: "Oprah",
+      lastName: "Winfrey",
+      age: 68,
+      image:
+        "https://www.thewikifeed.com/wp-content/uploads/2022/04/oprah-winfrey-1.jpg",
+    },
+    quote:
+      '"Think like a queen. A queen is not afraid to fail. Failure is another stepping stone to greatness."',
   },
   {
     id: 6,
-    author: "Henry Ford",
-    quote: '"Whether you think you can or you think you can’t, you’re right."',
+    author: {
+      firstName: "Yulia",
+      lastName: "Tymoshenko",
+      age: 61,
+      image:
+        "https://www.thefamouspeople.com/profiles/images/yulia-tymoshenko-1.jpg",
+    },
+    quote:
+      "Whenever you see a successful woman, look out for three men who are going out of their way to try to block her.",
   },
   {
     id: 7,
-    author: "Forrest Gump",
+    author: {
+      firstName: "Sheryl",
+      lastName: "Sandberg",
+      age: 58,
+      image:
+        "https://cdn.britannica.com/97/163897-050-A071A905/Sheryl-Sandberg-Facebook.jpg",
+    },
     quote:
-      '"Life is like a box of chocolates. You never know what you’re going to get."',
+      '"We need women at all levels, including the top, to change the dynamic, reshape the conversation, to make sure women’s voices are heard and heeded, not overlooked and ignored"',
   },
 ];
 
