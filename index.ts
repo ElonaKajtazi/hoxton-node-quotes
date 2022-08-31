@@ -2,20 +2,18 @@ import express from "express";
 import cors from "cors";
 const app = express();
 app.use(cors());
-// app.use(express.json());
+app.use(express.json());
 const port = 5000;
 
 const quotes = [
   {
     id: 1,
-
     firstName: "Tony",
     lastName: "Robins",
     age: 62,
     image:
       "https://netstorage-briefly.akamaized.net/images/3e85f08c087827f3.jpg?imwidth=900",
     quote: '"Goal setting is the secret to a compelling future."',
-    quantity: 2,
   },
   {
     id: 2,
@@ -26,7 +24,6 @@ const quotes = [
       "https://upload.wikimedia.org/wikipedia/commons/5/58/Vern_Law_%285405222334%29_%28cropped%29.jpg",
     quote:
       '"Experience is a hard teacher because she gives the test first, the lesson afterwards."',
-    quantity: 3,
   },
   {
     id: 3,
@@ -36,7 +33,6 @@ const quotes = [
     image:
       "https://dublintechsummit.tech/wp-content/uploads/sites/7/2017/01/cindy-landscape-720x423.jpg",
     quote: '"Women challenge the status quo because we are never it."',
-    quantity: 5,
   },
   {
     id: 4,
@@ -47,7 +43,6 @@ const quotes = [
       "https://s24806.pcdn.co/wp-content/uploads/2021/05/ArlanHamilton-2019photo-970.jpg",
     quote:
       '"We don’t just sit around and wait for other people. We just make, and we do."',
-    quantity: 3,
   },
   {
     id: 5,
@@ -58,7 +53,6 @@ const quotes = [
       "https://www.thewikifeed.com/wp-content/uploads/2022/04/oprah-winfrey-1.jpg",
     quote:
       '"Think like a queen. A queen is not afraid to fail. Failure is another stepping stone to greatness."',
-    quantity: 4,
   },
   {
     id: 6,
@@ -69,7 +63,6 @@ const quotes = [
       "https://www.thefamouspeople.com/profiles/images/yulia-tymoshenko-1.jpg",
     quote:
       "Whenever you see a successful woman, look out for three men who are going out of their way to try to block her.",
-    quantity: 6,
   },
   {
     id: 7,
@@ -80,7 +73,6 @@ const quotes = [
       "https://cdn.britannica.com/97/163897-050-A071A905/Sheryl-Sandberg-Facebook.jpg",
     quote:
       '"We need women at all levels, including the top, to change the dynamic, reshape the conversation, to make sure women’s voices are heard and heeded, not overlooked and ignored"',
-    quantity: 5,
   },
 ];
 
@@ -96,13 +88,25 @@ app.get("/quotes", (req, res) => {
     );
   }
   if (req.query.quote) {
-
     quotesToSend = quotesToSend.filter((quote) =>
-        //@ts-ignore
+      //@ts-ignore
       quote.quote.toLowerCase().includes(req.query.quote.toLowerCase())
     );
   }
   res.send(quotesToSend);
+});
+app.post("/quotes", (req, res) => {
+  const newQuote = {
+    id: quotes[quotes.length - 1].id + 1,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    age: req.body.age,
+    image: req.body.image,
+    quote: req.body.quote,
+
+  };
+  quotes.push(newQuote);
+  res.send(newQuote);
 });
 app.get("/quotes", (req, res) => {
   res.send(quotes);
