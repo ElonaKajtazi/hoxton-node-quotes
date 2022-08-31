@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 const app = express();
+app.use(cors());
+// app.use(express.json());
 const port = 5000;
 
 const quotes = [
@@ -14,6 +16,7 @@ const quotes = [
         "https://netstorage-briefly.akamaized.net/images/3e85f08c087827f3.jpg?imwidth=900",
     },
     quote: '"Goal setting is the secret to a compelling future."',
+    quantity: 2,
   },
   {
     id: 2,
@@ -26,6 +29,7 @@ const quotes = [
     },
     quote:
       '"Experience is a hard teacher because she gives the test first, the lesson afterwards."',
+    quantity: 3,
   },
   {
     id: 3,
@@ -37,6 +41,7 @@ const quotes = [
         "https://dublintechsummit.tech/wp-content/uploads/sites/7/2017/01/cindy-landscape-720x423.jpg",
     },
     quote: '"Women challenge the status quo because we are never it."',
+    quantity: 5,
   },
   {
     id: 4,
@@ -49,6 +54,7 @@ const quotes = [
     },
     quote:
       '"We don’t just sit around and wait for other people. We just make, and we do."',
+    quantity: 3,
   },
   {
     id: 5,
@@ -61,6 +67,7 @@ const quotes = [
     },
     quote:
       '"Think like a queen. A queen is not afraid to fail. Failure is another stepping stone to greatness."',
+    quantity: 4,
   },
   {
     id: 6,
@@ -73,6 +80,7 @@ const quotes = [
     },
     quote:
       "Whenever you see a successful woman, look out for three men who are going out of their way to try to block her.",
+    quantity: 6,
   },
   {
     id: 7,
@@ -85,27 +93,38 @@ const quotes = [
     },
     quote:
       '"We need women at all levels, including the top, to change the dynamic, reshape the conversation, to make sure women’s voices are heard and heeded, not overlooked and ignored"',
+    quantity: 5,
   },
 ];
 
-app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-
+app.get("/quotes", (req, res) => {
+  let quotesToSend = quotes;
+  // console.log(Number(req.query.quantity))
+  if(req.query.quantity) {
+    quotesToSend = quotesToSend.filter(quote => quote.quantity === Number(req.query.quantity))
+  }
+  if (req.query.quote) {
+    //@ts-ignore
+    quotesToSend = quotesToSend.filter(quote => quote.quote.toLowerCase().includes(req.query.quote?.toLowerCase()))
+  }
+  res.send(quotesToSend);
+});
 app.get("/quotes", (req, res) => {
   res.send(quotes);
 });
 app.get("/quotes/:id", (req, res) => {
   const id = Number(req.params.id);
-  const match = quotes.find(quote => quote.id === id)
-  if(match) {
+  const match = quotes.find((quote) => quote.id === id);
+  if (match) {
     res.send(match);
   } else {
-    res.status(404).send({error: "Quote not found!"})
+    res.status(404).send({ error: "Quote not found!" });
   }
-
 });
+
 app.get("/random", (req, res) => {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   res.send(quotes[randomIndex]);
