@@ -41,9 +41,8 @@ const quotes = [
       '"Life is like a box of chocolates. You never know what you’re going to get."',
   },
 ];
-// let numbers =[0, 1, 2, 3]
-// let shuffledNumbers = numbers.sort(() => Math.random() - 0.5)
-let number = Math.floor(Math.random() * 4);
+
+
 app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -57,5 +56,5 @@ app.get("/random", (req, res) => {
 });
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
-  // console.log(shuffledNumbers);
+
 });
