@@ -96,17 +96,36 @@ app.get("/quotes", (req, res) => {
   res.send(quotesToSend);
 });
 app.post("/quotes", (req, res) => {
-  const newQuote = {
-    id: quotes[quotes.length - 1].id + 1,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    age: req.body.age,
-    image: req.body.image,
-    quote: req.body.quote,
-
-  };
-  quotes.push(newQuote);
-  res.send(newQuote);
+  let errors: string[] = [];
+  if (typeof req.body.firstName !== "string") {
+    errors.push("FirstName not provided or not a string.");
+  }
+  if (typeof req.body.lastName !== "string") {
+    errors.push("LastName not provided or not a string.");
+  }
+  if (typeof req.body.age !== "number") {
+    errors.push("age not provided or not a number.");
+  }
+  if (typeof req.body.image !== "string") {
+    errors.push("image not provided or not a valid url.");
+  }
+  if (typeof req.body.quote !== "string") {
+    errors.push("Quote not provided or not a string.");
+  }
+  if (errors.length === 0) {
+    const newQuote = {
+      id: quotes[quotes.length - 1].id + 1,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      age: req.body.age,
+      image: req.body.image,
+      quote: req.body.quote,
+    };
+    quotes.push(newQuote);
+    res.send(newQuote);
+  } else {
+    res.status(400).send({ errors: errors });
+  }
 });
 app.get("/quotes", (req, res) => {
   res.send(quotes);
