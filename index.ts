@@ -14,6 +14,15 @@ app.get("/", (req, res) => {
   </ul>`);
 });
 app.get("/quotes", (req, res) => {
+  let quotesToSend = quotes;
+
+  if (req.query.includeAuthor === "true") {
+    quotesToSend = quotes.map((quote) => {
+      let author = authors.find((author) => author.id === quote.authorId);
+      return { ...quote, author };
+    });
+  }
+
   // let quotesToSend = quotes;
   // console.log(Number(req.query.quantity))
   // if (req.query.age) {
@@ -27,11 +36,11 @@ app.get("/quotes", (req, res) => {
   //     quote.quote.toLowerCase().includes(req.query.quote.toLowerCase())
   //   );
   // }
-  res.send(quotes);
+  res.send(quotesToSend);
 });
 app.get("/authors", (req, res) => {
-  res.send(authors)
-})
+  res.send(authors);
+});
 // app.post("/quotes", (req, res) => {
 //   let errors: string[] = [];
 //   if (typeof req.body.firstName !== "string") {
