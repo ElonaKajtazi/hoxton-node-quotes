@@ -48,7 +48,7 @@ app.post("/quotes", (req, res) => {
   }
   if (errors.length === 0) {
     const newQuote = {
-      id: quotes[quotes.length - 1].id + 1,
+      id: quotes.length === 0 ? 1 : quotes[quotes.length - 1].id + 1,
       authorId: req.body.authorId,
       text: req.body.text,
     };
@@ -89,7 +89,7 @@ app.post("/authors", (req, res) => {
 
   if (errors.length === 0) {
     const newAuthor = {
-      id: authors[authors.length - 1].id + 1,
+      id: authors.length === 0 ? 1 : authors[authors.length - 1].id + 1,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       age: req.body.age,
