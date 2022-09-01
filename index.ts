@@ -42,6 +42,10 @@ app.post("/quotes", (req, res) => {
   if (typeof req.body.text !== "string") {
     errors.push("text not provided or is not a string");
   }
+  let author = authors.find((author) => author.id === req.body.authorId);
+  if (!author) {
+    errors.push(`Author with id ${req.body.authorId} does not exist`);
+  }
   if (errors.length === 0) {
     const newQuote = {
       id: quotes[quotes.length - 1].id + 1,
@@ -67,6 +71,35 @@ app.get("/authors", (req, res) => {
   });
 
   res.send(authorsToSend);
+});
+app.post("/authors", (req, res) => {
+  let errors: string[] = [];
+  if (typeof req.body.firstName !== "string") {
+    errors.push("firstName not provided or is not a string");
+  }
+  if (typeof req.body.lastName !== "string") {
+    errors.push("lastName not provided or is not a string");
+  }
+  if (typeof req.body.age !== "number") {
+    errors.push("age not provided or is not a string");
+  }
+  if (typeof req.body.image !== "string") {
+    errors.push("image not provided or is not a string");
+  }
+
+  if (errors.length === 0) {
+    const newAuthor = {
+      id: authors[authors.length - 1].id + 1,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      age: req.body.age,
+      image: req.body.image,
+    };
+    authors.push(newAuthor);
+    res.send(newAuthor);
+  } else {
+    res.status(400).send({ errors });
+  }
 });
 // app.post("/quotes", (req, res) => {
 //   let errors: string[] = [];
