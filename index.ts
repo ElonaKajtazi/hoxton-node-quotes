@@ -72,6 +72,23 @@ app.delete("/quotes/:id", (req, res) => {
     res.status(404).send({ error: "Quote not found" });
   }
 });
+
+app.patch("/quotes/:id", (req, res) => {
+  let id = Number(req.params.id);
+  let match = quotes.find((quote) => quote.id === id);
+
+  if (match) {
+    if (req.body.authorId) {
+      match.authorId = req.body.authorId;
+    }
+    if (req.body.text) {
+      match.text = req.body.text;
+    }
+    res.send(match);
+  } else {
+    res.status(404).send({ error: "Quote not found" });
+  }
+});
 app.get("/authors", (req, res) => {
   // let ownersToSend = owners.map(owner => {
   //   const foundDogs = dogs.filter(dog => dog.ownerId === owner.id)
@@ -120,8 +137,29 @@ app.delete("/authors/:id", (req, res) => {
   const id = Number(req.params.id);
   const indexToDelete = authors.findIndex((author) => author.id === id);
   if (indexToDelete > -1) {
-    authors.splice(indexToDelete, 1)
+    authors.splice(indexToDelete, 1);
     res.send({ mesagge: "Author deleted successfully" });
+  } else {
+    res.status(404).send({ error: "Author not found" });
+  }
+});
+app.patch("/authors/:id", (req, res) => {
+  let id = Number(req.params.id);
+  let match = authors.find((author) => author.id === id);
+  if (match) {
+    if (req.body.firstName) {
+      match.firstName = req.body.firstName;
+    }
+    if (req.body.lastName) {
+      match.lastName = req.body.lastName;
+    }
+    if (req.body.age) {
+      match.age = req.body.age;
+    }
+    if (req.body.image) {
+      match.firstName = req.body.image;
+    }
+    res.send(match);
   } else {
     res.status(404).send({ error: "Author not found" });
   }
