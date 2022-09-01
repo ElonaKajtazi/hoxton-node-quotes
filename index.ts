@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { quotes, authors } from "./data";
+import { quotes, authors, quoteType } from "./data";
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -14,14 +14,10 @@ app.get("/", (req, res) => {
   </ul>`);
 });
 app.get("/quotes", (req, res) => {
-  let quotesToSend = quotes;
-
-  if (req.query.includeAuthor === "true") {
-    quotesToSend = quotes.map((quote) => {
-      let author = authors.find((author) => author.id === quote.authorId);
-      return { ...quote, author };
-    });
-  }
+  let quotesToSend = quotes.map((quote) => {
+    let author = authors.find((author) => author.id === quote.authorId);
+    return { ...quote, author };
+  });
 
   // let quotesToSend = quotes;
   // console.log(Number(req.query.quantity))
@@ -39,7 +35,18 @@ app.get("/quotes", (req, res) => {
   res.send(quotesToSend);
 });
 app.get("/authors", (req, res) => {
-  res.send(authors);
+  // let ownersToSend = owners.map(owner => {
+  //   const foundDogs = dogs.filter(dog => dog.ownerId === owner.id)
+  //   return { ...owner, dogs: foundDogs }
+  // })
+  let authorsToSend = authors.map((author) => {
+    const foundQuotes = quotes.filter((quote) => quote.authorId === author.id);
+
+    console.log(foundQuotes);
+    return { ...author, quotes: foundQuotes };
+  });
+
+  res.send(authorsToSend);
 });
 // app.post("/quotes", (req, res) => {
 //   let errors: string[] = [];

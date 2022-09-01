@@ -1,4 +1,9 @@
-export const quotes = [
+export type quoteType = {
+  id: number;
+  authorId: number;
+  text: string;
+};
+export const quotes: quoteType[] = [
   {
     id: 1,
     authorId: 1,
@@ -11,7 +16,7 @@ export const quotes = [
   },
   {
     id: 3,
-    auuthorId: 3,
+    authorId: 3,
     text: '"Women challenge the status quo because we are never it."',
   },
   {
