@@ -5,6 +5,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 const port = 5000;
+
 app.get("/", (req, res) => {
   res.send(`<h1>Quote/Author API</h1>
   <h2>Available resources:</h2>
@@ -13,6 +14,7 @@ app.get("/", (req, res) => {
     <li><a href="/authors">Authors</a></li>
   </ul>`);
 });
+
 app.get("/quotes", (req, res) => {
   let quotesToSend = quotes.map((quote) => {
     let author = authors.find((author) => author.id === quote.authorId);
@@ -34,6 +36,7 @@ app.get("/quotes", (req, res) => {
   // }
   res.send(quotesToSend);
 });
+
 app.post("/quotes", (req, res) => {
   let errors: string[] = [];
   if (typeof req.body.authorId !== "number") {
@@ -56,6 +59,17 @@ app.post("/quotes", (req, res) => {
     res.send(newQuote);
   } else {
     res.status(400).send({ errors });
+  }
+});
+
+app.delete("/quotes/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const indexToDelete = quotes.findIndex((quote) => quote.id === id);
+  if (indexToDelete > -1) {
+    quotes.splice(indexToDelete, 1);
+    res.send({ message: "Quote deleted successfully" });
+  } else {
+    res.status(404).send({ error: "Quote not found" });
   }
 });
 app.get("/authors", (req, res) => {
@@ -99,6 +113,17 @@ app.post("/authors", (req, res) => {
     res.send(newAuthor);
   } else {
     res.status(400).send({ errors });
+  }
+});
+
+app.delete("/authors/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const indexToDelete = authors.findIndex((author) => author.id === id);
+  if (indexToDelete > -1) {
+    authors.splice(indexToDelete, 1)
+    res.send({ mesagge: "Author deleted successfully" });
+  } else {
+    res.status(404).send({ error: "Author not found" });
   }
 });
 // app.post("/quotes", (req, res) => {
