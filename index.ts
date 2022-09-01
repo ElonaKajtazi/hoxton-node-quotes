@@ -34,6 +34,26 @@ app.get("/quotes", (req, res) => {
   // }
   res.send(quotesToSend);
 });
+app.post("/quotes", (req, res) => {
+  let errors: string[] = [];
+  if (typeof req.body.authorId !== "number") {
+    errors.push("authorId not provided or not a number");
+  }
+  if (typeof req.body.text !== "string") {
+    errors.push("text not provided or is not a string");
+  }
+  if (errors.length === 0) {
+    const newQuote = {
+      id: quotes[quotes.length - 1].id + 1,
+      authorId: req.body.authorId,
+      text: req.body.text,
+    };
+    quotes.push(newQuote);
+    res.send(newQuote);
+  } else {
+    res.status(400).send({ errors });
+  }
+});
 app.get("/authors", (req, res) => {
   // let ownersToSend = owners.map(owner => {
   //   const foundDogs = dogs.filter(dog => dog.ownerId === owner.id)
