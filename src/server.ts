@@ -15,24 +15,28 @@ SELECT * FROM quotes;
 const getAuthors = db.prepare(`
 SELECT * FROM authors;
 `);
+
 const getQuoteById = db.prepare(`
 SELECT * FROM quotes WHERE id = @id;
 `);
 const getAuthorById = db.prepare(`
 SELECT * FROM authors WHERE id = @id;
 `);
+
 const createQuote = db.prepare(`
 INSERT INTO quotes (authorId, text) VALUES (@authorId, @text);
 `);
 const createAuthor = db.prepare(`
 INSERT INTO authors (firstName, lastName, age, image) VALUES (@firstName, @lastName, @age, @image);
 `);
+
 const deleteQuote = db.prepare(`
 DELETE FROM quotes WHERE id=@id;
 `);
 const deleteAuthor = db.prepare(`
 DELETE FROM authors WHERE id=@id;
 `);
+
 const updateQuote = db.prepare(`
 UPDATE quotes
 SET authorId = @authorId, text = @text
@@ -113,6 +117,7 @@ app.get("/authors/:id", (req, res) => {
   // }
 });
 
+ // these post ones are not complete....
 app.post("/quotes", (req, res) => {
   const info = createQuote.run(req.body);
   const quote = getQuoteById.get({ id: info.lastInsertRowid });

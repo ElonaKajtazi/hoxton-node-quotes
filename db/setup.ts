@@ -106,6 +106,7 @@ const authors = [
       "https://cdn.britannica.com/97/163897-050-A071A905/Sheryl-Sandberg-Facebook.jpg",
   },
 ];
+
 const dropQuotesTable = db.prepare(`
 DROP TABLE IF EXISTS quotes
 `);
