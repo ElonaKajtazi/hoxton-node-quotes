@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import express from "express";
 import cors from "cors";
-import { quotes, authors } from "../data";
+// import { quotes, authors } from "../data";
 
 const app = express();
 const db = Database("./db/data.db", { verbose: console.log });
@@ -12,18 +12,35 @@ const port = 5000;
 const getQuotes = db.prepare(`
 SELECT * FROM quotes;
 `);
+const getAuthors = db.prepare(`
+SELECT * FROM authors;
+`);
 const getQuoteById = db.prepare(`
 SELECT * FROM quotes WHERE id = @id;
+`);
+const getAuthorById = db.prepare(`
+SELECT * FROM authors WHERE id = @id;
 `);
 const createQuote = db.prepare(`
 INSERT INTO quotes (authorId, text) VALUES (@authorId, @text);
 `);
+const createAuthor = db.prepare(`
+INSERT INTO authors (firstName, lastName, age, image) VALUES (@firstName, @lastName, @age, @image);
+`);
 const deleteQuote = db.prepare(`
 DELETE FROM quotes WHERE id=@id;
+`);
+const deleteAuthor = db.prepare(`
+DELETE FROM authors WHERE id=@id;
 `);
 const updateQuote = db.prepare(`
 UPDATE quotes
 SET authorId = @authorId, text = @text
+WHERE id = @id
+`);
+const updateAuthor = db.prepare(`
+UPDATE authors
+SET firstName = @firstName, lastName = @lastName, age = @age, image = @image 
 WHERE id = @id
 `);
 
@@ -48,6 +65,22 @@ app.get("/quotes", (req, res) => {
 
   // res.send(quotesToSend);
 });
+app.get("/authors", (req, res) => {
+  const authors = getAuthors.all();
+  res.send(authors);
+  // let ownersToSend = owners.map(owner => {
+  //   const foundDogs = dogs.filter(dog => dog.ownerId === owner.id)
+  //   return { ...owner, dogs: foundDogs }
+  // })
+  // let authorsToSend = authors.map((author) => {
+  //   const foundQuotes = quotes.filter((quote) => quote.authorId === author.id);
+
+  //   console.log(foundQuotes);
+  //   return { ...author, quotes: foundQuotes };
+  // });
+
+  // res.send(authorsToSend);
+});
 
 app.get("/quotes/:id", (req, res) => {
   const quote = getQuoteById.get(req.params);
@@ -55,6 +88,21 @@ app.get("/quotes/:id", (req, res) => {
     res.send(quote);
   } else {
     res.status(404).send({ error: "Quote not found!" });
+  }
+  // const id = Number(req.params.id);
+  // const match = quotes.find((quote) => quote.id === id);
+  // if (match) {
+  //   res.send(match);
+  // } else {
+  //   res.status(404).send({ error: "Quote not found!" });
+  // }
+});
+app.get("/authors/:id", (req, res) => {
+  const author = getAuthorById.get(req.params);
+  if (author) {
+    res.send(author);
+  } else {
+    res.status(404).send({ error: "Author not found!" });
   }
   // const id = Number(req.params.id);
   // const match = quotes.find((quote) => quote.id === id);
@@ -93,6 +141,39 @@ app.post("/quotes", (req, res) => {
   //   res.status(400).send({ errors });
   // }
 });
+app.post("/authors", (req, res) => {
+  const info = createAuthor.run(req.body);
+  const author = getAuthorById.get({ id: info.lastInsertRowid });
+  res.send(author);
+
+  // let errors: string[] = [];
+  // if (typeof req.body.firstName !== "string") {
+  //   errors.push("firstName not provided or is not a string");
+  // }
+  // if (typeof req.body.lastName !== "string") {
+  //   errors.push("lastName not provided or is not a string");
+  // }
+  // if (typeof req.body.age !== "number") {
+  //   errors.push("age not provided or is not a string");
+  // }
+  // if (typeof req.body.image !== "string") {
+  //   errors.push("image not provided or is not a string");
+  // }
+
+  // if (errors.length === 0) {
+  //   const newAuthor = {
+  //     id: authors.length === 0 ? 1 : authors[authors.length - 1].id + 1,
+  //     firstName: req.body.firstName,
+  //     lastName: req.body.lastName,
+  //     age: req.body.age,
+  //     image: req.body.image,
+  //   };
+  //   authors.push(newAuthor);
+  //   res.send(newAuthor);
+  // } else {
+  //   res.status(400).send({ errors });
+  // }
+});
 
 app.delete("/quotes/:id", (req, res) => {
   const info = deleteQuote.run(req.params);
@@ -108,6 +189,22 @@ app.delete("/quotes/:id", (req, res) => {
   //   res.send({ message: "Quote deleted successfully" });
   // } else {
   //   res.status(404).send({ error: "Quote not found" });
+  // }
+});
+app.delete("/authors/:id", (req, res) => {
+  const info = deleteAuthor.run(req.params);
+  if (info.changes) {
+    res.send({ message: "Author deleted successfully" });
+  } else {
+    res.status(404).send({ message: "Author not found" });
+  }
+  // const id = Number(req.params.id);
+  // const indexToDelete = authors.findIndex((author) => author.id === id);
+  // if (indexToDelete > -1) {
+  //   authors.splice(indexToDelete, 1);
+  //   res.send({ mesagge: "Author deleted successfully" });
+  // } else {
+  //   res.status(404).send({ error: "Author not found" });
   // }
 });
 
@@ -135,84 +232,35 @@ app.patch("/quotes/:id", (req, res) => {
   //   res.status(404).send({ error: "Quote not found" });
   // }
 });
-
-// app.get("/authors", (req, res) => {
-//   // let ownersToSend = owners.map(owner => {
-//   //   const foundDogs = dogs.filter(dog => dog.ownerId === owner.id)
-//   //   return { ...owner, dogs: foundDogs }
-//   // })
-//   let authorsToSend = authors.map((author) => {
-//     const foundQuotes = quotes.filter((quote) => quote.authorId === author.id);
-
-//     console.log(foundQuotes);
-//     return { ...author, quotes: foundQuotes };
-//   });
-
-//   res.send(authorsToSend);
-// });
-
-// app.post("/authors", (req, res) => {
-//   let errors: string[] = [];
-//   if (typeof req.body.firstName !== "string") {
-//     errors.push("firstName not provided or is not a string");
-//   }
-//   if (typeof req.body.lastName !== "string") {
-//     errors.push("lastName not provided or is not a string");
-//   }
-//   if (typeof req.body.age !== "number") {
-//     errors.push("age not provided or is not a string");
-//   }
-//   if (typeof req.body.image !== "string") {
-//     errors.push("image not provided or is not a string");
-//   }
-
-//   if (errors.length === 0) {
-//     const newAuthor = {
-//       id: authors.length === 0 ? 1 : authors[authors.length - 1].id + 1,
-//       firstName: req.body.firstName,
-//       lastName: req.body.lastName,
-//       age: req.body.age,
-//       image: req.body.image,
-//     };
-//     authors.push(newAuthor);
-//     res.send(newAuthor);
-//   } else {
-//     res.status(400).send({ errors });
-//   }
-// });
-
-// app.delete("/authors/:id", (req, res) => {
-//   const id = Number(req.params.id);
-//   const indexToDelete = authors.findIndex((author) => author.id === id);
-//   if (indexToDelete > -1) {
-//     authors.splice(indexToDelete, 1);
-//     res.send({ mesagge: "Author deleted successfully" });
-//   } else {
-//     res.status(404).send({ error: "Author not found" });
-//   }
-// });
-
-// app.patch("/authors/:id", (req, res) => {
-//   let id = Number(req.params.id);
-//   let match = authors.find((author) => author.id === id);
-//   if (match) {
-//     if (req.body.firstName) {
-//       match.firstName = req.body.firstName;
-//     }
-//     if (req.body.lastName) {
-//       match.lastName = req.body.lastName;
-//     }
-//     if (req.body.age) {
-//       match.age = req.body.age;
-//     }
-//     if (req.body.image) {
-//       match.firstName = req.body.image;
-//     }
-//     res.send(match);
-//   } else {
-//     res.status(404).send({ error: "Author not found" });
-//   }
-// });
+app.patch("/authors/:id", (req, res) => {
+  const author = getAuthorById.get(req.params);
+  if (author) {
+    const newAuthorData = { ...author, ...req.body };
+    updateAuthor.run(newAuthorData);
+    res.send(newAuthorData);
+  } else {
+    res.status(404).send({ message: "Author not found" });
+  }
+  // let id = Number(req.params.id);
+  // let match = authors.find((author) => author.id === id);
+  // if (match) {
+  //   if (req.body.firstName) {
+  //     match.firstName = req.body.firstName;
+  //   }
+  //   if (req.body.lastName) {
+  //     match.lastName = req.body.lastName;
+  //   }
+  //   if (req.body.age) {
+  //     match.age = req.body.age;
+  //   }
+  //   if (req.body.image) {
+  //     match.firstName = req.body.image;
+  //   }
+  //   res.send(match);
+  // } else {
+  //   res.status(404).send({ error: "Author not found" });
+  // }
+});
 
 // app.get("/random", (req, res) => {
 //   const randomIndex = Math.floor(Math.random() * quotes.length);
