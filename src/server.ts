@@ -117,11 +117,23 @@ app.get("/authors/:id", (req, res) => {
   // }
 });
 
- // these post ones are not complete....
+// these post ones are not complete....
 app.post("/quotes", (req, res) => {
-  const info = createQuote.run(req.body);
-  const quote = getQuoteById.get({ id: info.lastInsertRowid });
-  res.send(quote);
+  let errors: string[] = [];
+  if (typeof req.body.authorId !== "number") {
+    errors.push("authorId not provided or not a number");
+  }
+  if (typeof req.body.text !== "string") {
+    errors.push("text not provided or is not a string");
+  }
+
+  if (errors.length === 0) {
+    const info = createQuote.run(req.body);
+    const quote = getQuoteById.get({ id: info.lastInsertRowid });
+    res.send(quote);
+  } else {
+    res.status(400).send({ errors });
+  }
 
   // let errors: string[] = [];
   // if (typeof req.body.authorId !== "number") {
@@ -147,9 +159,27 @@ app.post("/quotes", (req, res) => {
   // }
 });
 app.post("/authors", (req, res) => {
-  const info = createAuthor.run(req.body);
-  const author = getAuthorById.get({ id: info.lastInsertRowid });
-  res.send(author);
+  const errors: string[] = [];
+  if (typeof req.body.firstName !== "string") {
+    errors.push("firstName not provided or is not a string");
+  }
+  if (typeof req.body.lastName !== "string") {
+    errors.push("lastName not provided or is not a string");
+  }
+  if (typeof req.body.age !== "number") {
+    errors.push("age not provided or is not a string");
+  }
+  if (typeof req.body.image !== "string") {
+    errors.push("image not provided or is not a string");
+  }
+
+  if (errors.length === 0) {
+    const info = createAuthor.run(req.body);
+    const author = getAuthorById.get({ id: info.lastInsertRowid });
+    res.send(author);
+  } else {
+    res.status(400).send({ errors });
+  }
 
   // let errors: string[] = [];
   // if (typeof req.body.firstName !== "string") {
